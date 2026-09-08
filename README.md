@@ -1,307 +1,317 @@
-# Docker-most-popular-commands-in-turkish
-# 🐳 Docker Komut Rehberi
+# 🐳 Docker Command Reference
 
-> `docker run`, `docker exec`, `docker build` ve `docker ps` komutlarının, en sık kullanılan tüm seçenekleriyle birlikte kapsamlı bir referansı.
+> A comprehensive reference for the `docker run`, `docker exec`, `docker build`, and `docker ps` commands and their most frequently used options.
 
-## 📑 İçindekiler
+## 📑 Contents
 
-- [`docker run`](#docker-run)
-- [`docker exec`](#docker-exec)
-- [`docker build`](#docker-build)
-- [`docker ps`](#docker-ps)
-- [Hızlı Referans Tablosu](#hızlı-referans-tablosu)
-- [İlgili Komutlar](#i̇lgili-komutlar)
-
----
+- [`docker run`](https://www.google.com/search?q=%23docker-run)
+- [`docker exec`](https://www.google.com/search?q=%23docker-exec)
+- [`docker build`](https://www.google.com/search?q=%23docker-build)
+- [`docker ps`](https://www.google.com/search?q=%23docker-ps)
+- [Quick Reference Table](https://www.google.com/search?q=%23quick-reference-table)
+- [Related Commands](https://www.google.com/search?q=%23related-commands)
 
 ## `docker run`
 
-Belirtilen image'dan **yeni bir container oluşturur ve çalıştırır**. Var olan bir container'ı yeniden başlatmaz — bunun için `docker start` kullanılır.
+**Creates and starts a new container** from the specified image. It does not restart an existing container—use `docker start` for that.
 
-### Söz Dizimi
+### Syntax
 
-```bash
-docker run [SEÇENEKLER] IMAGE[:TAG] [KOMUT] [ARG...]
+Bash
+
+```
+docker run [OPTIONS] IMAGE[:TAG] [COMMAND] [ARG...]
+
 ```
 
-### Çalışma Modu
+### Working Mode
 
-| Seçenek | Açıklama |
-|---|---|
-| `-d`, `--detach` | Container'ı arka planda çalıştırır, ID'yi yazdırıp terminale geri döner |
-| `-i`, `--interactive` | STDIN'i açık tutar |
-| `-t`, `--tty` | Sahte bir terminal (pseudo-TTY) tahsis eder |
-| `-it` | `-i` ve `-t` birleşimi; interaktif shell açmak için standart kullanım |
-| `--rm` | Container durunca otomatik olarak silinir (test amaçlı çalıştırmalarda disk çöpü bırakmaz) |
-| `-a`, `--attach` | STDIN/STDOUT/STDERR'e bağlanır |
+| **Option**            | **Description**                                                                             |
+| --------------------- | ------------------------------------------------------------------------------------------- |
+| `-d`, `--detach`      | Runs the container in the background, prints its ID, and returns to the terminal            |
+| `-i`, `--interactive` | Keeps STDIN open                                                                            |
+| `-t`, `--tty`         | Allocates a pseudo-TTY                                                                      |
+| `-it`                 | Combination of `-i` and `-t`; the standard way to open an interactive shell                   |
+| `--rm`                | Automatically removes the container when it exits (leaves no disk clutter during test runs) |
+| `-a`, `--attach`      | Attaches to STDIN/STDOUT/STDERR                                                             |
 
-### İsimlendirme ve Kimlik
+### Naming and Identity
 
-| Seçenek | Açıklama |
-|---|---|
-| `--name` | Container'a otomatik üretilen isim yerine kendi isminizi verir |
-| `-h`, `--hostname` | Container içindeki hostname'i belirler |
-| `-l`, `--label` | `key=value` formatında metadata ekler |
+| **Option**         | **Description**                                                         |
+| ------------------ | ----------------------------------------------------------------------- |
+| `--name`           | Assigns a custom name to the container instead of an auto-generated one |
+| `-h`, `--hostname` | Sets the hostname inside the container                                  |
+| `-l`, `--label`    | Adds metadata in `key=value` format                                     |
 
-### Ağ (Network)
+### Network
 
-| Seçenek | Açıklama |
-|---|---|
-| `-p`, `--publish` | Host:container port eşlemesi yapar (örn. `8080:80`) |
-| `-P`, `--publish-all` | Image'daki tüm `EXPOSE` edilmiş portları rastgele host portlarına açar |
-| `--network` | Container'ı belirli bir ağa bağlar (`bridge`, `host`, `none` veya özel ağ adı) |
-| `--add-host` | `/etc/hosts` dosyasına host:IP eşlemesi ekler |
-| `--link` | (Eski/legacy) başka bir container'a bağlantı kurar; yerini custom network'ler almıştır |
+| **Option**            | **Description**                                                                                   |
+| --------------------- | ------------------------------------------------------------------------------------------------- |
+| `-p`, `--publish`     | Maps host\:container ports (e.g., `8080:80`)                                                      |
+| `-P`, `--publish-all` | Exposes all `EXPOSE`d ports from the image to random host ports                                   |
+| `--network`           | Connects the container to a specific network (`bridge`, `host`, `none`, or a custom network name) |
+| `--add-host`          | Adds a host\:IP mapping to `/etc/hosts`                                                           |
+| `--link`              | (Legacy) Links to another container; replaced by custom networks                                  |
 
-### Depolama
+### Storage
 
-| Seçenek | Açıklama |
-|---|---|
-| `-v`, `--volume` | Host dizinini veya named volume'ü container'a bağlar (`/host/yol:/container/yol`) |
-| `--mount` | `-v`'nin daha açık sözdizimli hâli (`type=bind,source=...,target=...`) |
+| **Option**       | **Description**                                                                           |
+| ---------------- | ----------------------------------------------------------------------------------------- |
+| `-v`, `--volume` | Mounts a host directory or named volume into the container (`/host/path:/container/path`) |
+| `--mount`        | A more explicit syntax version of `-v` (`type=bind,source=...,target=...`)                  |
 
-### Ortam Değişkenleri
+### Environment Variables
 
-| Seçenek | Açıklama |
-|---|---|
-| `-e`, `--env` | Ortam değişkeni tanımlar (`-e NODE_ENV=production`) |
-| `--env-file` | Ortam değişkenlerini bir dosyadan okur |
+| **Option**    | **Description**                                            |
+| ------------- | ---------------------------------------------------------- |
+| `-e`, `--env` | Defines an environment variable (`-e NODE_ENV=production`) |
+| `--env-file`  | Reads environment variables from a file                    |
 
-### Kaynak Sınırlama
+### Resource Limits
 
-| Seçenek | Açıklama |
-|---|---|
-| `-m`, `--memory` | Bellek limiti (örn. `512m`) |
-| `--cpus` | Kullanılabilecek CPU sayısı (örn. `1.5`) |
-| `--gpus` | GPU erişimi verir (`--gpus all`) |
+| **Option**       | **Description**                     |
+| ---------------- | ----------------------------------- |
+| `-m`, `--memory` | Memory limit (e.g., `512m`)         |
+| `--cpus`         | Number of usable CPUs (e.g., `1.5`) |
+| `--gpus`         | Grants GPU access (`--gpus all`)    |
 
-### Yetkiler ve Kullanıcı
+### Privileges and User
 
-| Seçenek | Açıklama |
-|---|---|
-| `-u`, `--user` | Container içinde çalıştırılacak kullanıcı/UID |
-| `-w`, `--workdir` | Container içindeki çalışma dizini |
-| `--privileged` | Genişletilmiş (host'a yakın) yetkiler verir — dikkatli kullanılmalı |
-| `--cap-add` / `--cap-drop` | Belirli kernel capability'lerini ekler/kaldırır |
+| **Option**                 | **Description**                                         |
+| -------------------------- | ------------------------------------------------------- |
+| `-u`, `--user`             | User/UID used to run commands inside the container           |
+| `-w`, `--workdir`          | Working directory inside the container                  |
+| `--privileged`             | Grants extended (host-like) privileges—use with caution |
+| `--cap-add` / `--cap-drop` | Adds or drops specific kernel capabilities              |
 
-### Yeniden Başlatma ve Diğer
+### Restart and Other Options
 
-| Seçenek | Açıklama |
-|---|---|
-| `--restart` | `no`, `on-failure`, `always`, `unless-stopped` |
-| `--entrypoint` | Image'ın varsayılan `ENTRYPOINT`'ini geçersiz kılar |
-| `--pull` | İmajın ne zaman çekileceği: `always`, `missing`, `never` |
+| **Option**     | **Description**                                      |
+| -------------- | ---------------------------------------------------- |
+| `--restart`    | `no`, `on-failure`, `always`, `unless-stopped`       |
+| `--entrypoint` | Overrides the image's default `ENTRYPOINT`           |
+| `--pull`       | Controls when to pull the image: `always`, `missing`, `never` |
 
-### Örnekler
+### Examples
 
-```bash
-# Nginx'i arka planda başlat, 8080 -> 80 port yönlendirmesi yap
+Bash
+
+```
+# Start Nginx in the background, map port 8080 to 80
 docker run -d -p 8080:80 --name web nginx
 
-# Ubuntu içinde interaktif bash aç, çıkınca container'ı sil
+# Open an interactive bash inside Ubuntu, remove container upon exit
 docker run -it --rm ubuntu bash
 
-# Host dizinini container'a bağla, çalışma dizinini ayarla
+# Mount host directory into container, set working directory
 docker run -v $(pwd):/app -w /app node:20 npm install
 
-# Ortam değişkeni ver, restart policy uygula
-docker run -d -e POSTGRES_PASSWORD=gizli --restart unless-stopped postgres
+# Provide environment variable, apply restart policy
+docker run -d -e POSTGRES_PASSWORD=secret --restart unless-stopped postgres
 
-# GPU erişimiyle çalıştır
+# Run with GPU access
 docker run --gpus all -it nvidia/cuda:12.4.1-base-ubuntu24.04 nvidia-smi
-```
 
----
+```
 
 ## `docker exec`
 
-**Zaten çalışmakta olan** bir container'ın içinde yeni bir komut çalıştırır. `docker run` yeni container oluştururken, `exec` var olana "girer".
+Runs a new command inside an **already running** container. While `docker run` creates a new container, `exec` enters an existing one.
 
-### Söz Dizimi
+### Syntax
 
-```bash
-docker exec [SEÇENEKLER] CONTAINER KOMUT [ARG...]
+Bash
+
+```
+docker exec [OPTIONS] CONTAINER COMMAND [ARG...]
+
 ```
 
-### Seçenekler
+### Options
 
-| Seçenek | Açıklama |
-|---|---|
-| `-i`, `--interactive` | STDIN'i açık tutar |
-| `-t`, `--tty` | Pseudo-TTY tahsis eder |
-| `-it` | İkisi birlikte; container içine shell ile girmenin standart yolu |
-| `-d`, `--detach` | Komutu arka planda çalıştırır |
-| `-u`, `--user` | Komutu belirli bir kullanıcı/UID ile çalıştırır |
-| `-w`, `--workdir` | Komutun çalışacağı dizini belirler |
-| `-e`, `--env` | Ek ortam değişkeni tanımlar |
-| `--env-file` | Ortam değişkenlerini dosyadan okur |
-| `--privileged` | Genişletilmiş yetkilerle çalıştırır |
-| `--detach-keys` | Detach (ayrılma) tuş kombinasyonunu özelleştirir |
+| **Option**            | **Description**                                               |
+| --------------------- | ------------------------------------------------------------- |
+| `-i`, `--interactive` | Keeps STDIN open                                              |
+| `-t`, `--tty`         | Allocates a pseudo-TTY                                        |
+| `-it`                 | Both together; the standard way to enter a container with a shell |
+| `-d`, `--detach`      | Runs the command in the background                            |
+| `-u`, `--user`        | Runs the command with a specific user/UID                     |
+| `-w`, `--workdir`     | Sets the working directory for the command                    |
+| `-e`, `--env`         | Defines an additional environment variable                         |
+| `--env-file`          | Reads environment variables from a file                       |
+| `--privileged`        | Runs with extended privileges                                 |
+| `--detach-keys`       | Customizes the key sequence used for detaching                     |
 
-### Örnekler
+### Examples
 
-```bash
-# Çalışan bir container'a interaktif shell ile gir
+Bash
+
+```
+# Enter a running container with an interactive shell
 docker exec -it web bash
 
-# Root yerine belirli bir kullanıcı ile komut çalıştır
+# Run a command with a specific user instead of root
 docker exec -u 1000 -it web sh
 
-# Belirli bir dizinde komut çalıştır
+# Run a command in a specific directory
 docker exec -w /var/www web ls -la
 
-# Arka planda tek seferlik komut çalıştır
-docker exec -d web touch /tmp/hazir.txt
+# Run a one-off command in the background
+docker exec -d web touch /tmp/ready.txt
+
 ```
 
-> 💡 **Not:** `docker exec`, container'ın **çalışıyor** olmasını gerektirir. Durmuş bir container'a `exec` ile giremezsiniz; önce `docker start` ile başlatmanız gerekir.
-
----
+> 💡 **Note:** `docker exec` requires the container to be **running**. You cannot enter a stopped container using `exec`; you must start it first with `docker start`.
 
 ## `docker build`
 
-Bir `Dockerfile`'dan yeni bir **image** üretir.
+Produces a new **image** from a `Dockerfile`.
 
-### Söz Dizimi
+### Syntax
 
-```bash
-docker build [SEÇENEKLER] YOL | URL | -
+Bash
+
+```
+docker build [OPTIONS] PATH | URL | -
+
 ```
 
-### Temel Seçenekler
+### Basic Options
 
-| Seçenek | Açıklama |
-|---|---|
-| `-t`, `--tag` | İmaja isim ve tag verir (`-t app:1.0`) — birden fazla kez kullanılabilir |
-| `-f`, `--file` | Varsayılan `Dockerfile` yerine farklı bir dosya belirtir |
+| **Option**     | **Description**                                                      |
+| -------------- | -------------------------------------------------------------------- |
+| `-t`, `--tag`  | Names and tags the image (`-t app:1.0`) — can be used multiple times |
+| `-f`, `--file` | Specifies a different file instead of the default `Dockerfile`       |
 
-### Cache ve Build Davranışı
+### Cache and Build Behavior
 
-| Seçenek | Açıklama |
-|---|---|
-| `--no-cache` | Build cache'ini kullanmadan sıfırdan build eder |
-| `--pull` | Yerelde güncel olsa bile base image'ı yeniden çeker |
-| `--build-arg` | Dockerfile'daki `ARG` değerlerini build zamanında belirler |
-| `--target` | Multi-stage Dockerfile'larda hangi stage'in build edileceğini belirtir |
-| `--progress` | İlerleme çıktısının biçimi: `auto`, `plain`, `tty` |
+| **Option**    | **Description**                                           |
+| ------------- | --------------------------------------------------------- |
+| `--no-cache`  | Builds from scratch without using the build cache         |
+| `--pull`      | Re-pulls the base image even if it is already up to date locally  |
+| `--build-arg` | Sets `ARG` values in the Dockerfile at build time         |
+| `--target`    | Specifies which stage to build in multi-stage Dockerfiles |
+| `--progress`  | Progress output format: `auto`, `plain`, `tty`        |
 
-### BuildKit / buildx Tabanlı Seçenekler
+### BuildKit / buildx Based Options
 
-Güncel Docker sürümlerinde (BuildKit varsayılan builder) doğrudan kullanılabilir:
+Available directly in modern Docker versions (BuildKit is the default builder):
 
-| Seçenek | Açıklama |
-|---|---|
-| `--platform` | Hedef platform(lar) (`linux/amd64,linux/arm64`) |
-| `-o`, `--output` | Build çıktısının nereye yazılacağı (yerel dosya sistemi, tar vb.) |
-| `--cache-from` / `--cache-to` | Uzak/yerel build cache kaynakları |
-| `--secret` | Build sürecine imaja gömülmeden secret aktarır |
-| `--ssh` | SSH agent soketi/anahtarlarını build'e taşır (özel repo clone'ları için) |
+| **Option**                    | **Description**                                                        |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| `--platform`                  | Target platform(s) (`linux/amd64,linux/arm64`)                         |
+| `-o`, `--output`              | Where to write the build output (local file system, tar, etc.)         |
+| `--cache-from` / `--cache-to` | Remote/local build cache sources                                       |
+| `--secret`                    | Passes a secret to the build process without embedding it in the image |
+| `--ssh`                       | Forwards the SSH agent socket/keys to the build (for private repository clones)  |
 
-### Diğer
+### Other
 
-| Seçenek | Açıklama |
-|---|---|
-| `--network` | `RUN` adımlarının kullanacağı network modu |
-| `--label` | İmaja metadata ekler |
-| `--add-host` | Build sırasında `/etc/hosts`'a giriş ekler |
+| **Option**   | **Description**                            |
+| ------------ | ------------------------------------------ |
+| `--network`  | Network mode to use for `RUN` steps        |
+| `--label`    | Adds metadata to the image                 |
+| `--add-host` | Adds an entry to `/etc/hosts` during the build |
 
-### Örnekler
+### Examples
 
-```bash
-# Basit build, mevcut dizindeki Dockerfile'ı kullan
-docker build -t benimuygulamam:1.0 .
+Bash
 
-# Farklı bir Dockerfile ile build
-docker build -f Dockerfile.prod -t benimuygulamam:prod .
+```
+# Simple build using the Dockerfile in the current directory
+docker build -t myapp:1.0 .
 
-# Cache kullanmadan, build-arg ile
+# Build using a different Dockerfile
+docker build -f Dockerfile.prod -t myapp:prod .
+
+# Build without cache, with a build argument
 docker build --no-cache --build-arg NODE_ENV=production -t app:latest .
 
-# Multi-stage Dockerfile'da sadece "test" stage'ini build et
+# Build only the "test" stage in a multi-stage Dockerfile
 docker build --target test -t app:test .
 
-# Çoklu mimari için build ve registry'ye push
-docker buildx build --platform linux/amd64,linux/arm64 -t kullanici/app:1.0 --push .
+# Build for multiple architectures and push to a registry
+docker buildx build --platform linux/amd64,linux/arm64 -t username/app:1.0 --push .
+
 ```
 
-> 💡 **Not:** Birden fazla mimari için build ederken genellikle `docker buildx build` kullanılır ve sonuç doğrudan `--push` ile bir registry'ye gönderilir; çünkü tek bir yerel image olarak birden fazla mimariyi aynı anda tutmak mümkün değildir.
-
----
+> 💡 **Note:** When building for multiple architectures, `docker buildx build` is typically used and the result is sent directly to a registry via `--push`, because it is not possible to hold multiple architectures in a single local image at the same time.
 
 ## `docker ps`
 
-Çalışan (veya `-a` ile tüm) container'ları listeler.
+Lists running containers (or all containers with `-a`).
 
-### Söz Dizimi
+### Syntax
 
-```bash
-docker ps [SEÇENEKLER]
+Bash
+
+```
+docker ps [OPTIONS]
+
 ```
 
-### Seçenekler
+### Options
 
-| Seçenek | Açıklama |
-|---|---|
-| `-a`, `--all` | Sadece çalışanları değil, durmuş container'ları da gösterir |
-| `-q`, `--quiet` | Sadece container ID'lerini yazdırır (script'ler için idealdir) |
-| `-f`, `--filter` | Koşula göre filtreler (`status=running`, `name=web` vb.) |
-| `-n`, `--last` | Son oluşturulan N container'ı gösterir (durmuşlar dahil) |
-| `-l`, `--latest` | En son oluşturulan container'ı gösterir |
-| `-s`, `--size` | Container'ların disk boyutunu da gösterir |
-| `--no-trunc` | Çıktıyı kısaltmadan (ID, komut vb. tam haliyle) gösterir |
-| `--format` | Çıktıyı Go template sözdizimiyle özelleştirir |
+| **Option**       | **Description**                                                     |
+| ---------------- | ------------------------------------------------------------------- |
+| `-a`, `--all`    | Shows all containers, not just running ones, including stopped ones |
+| `-q`, `--quiet`  | Prints only container IDs (ideal for scripts)                       |
+| `-f`, `--filter` | Filters based on conditions (`status=running`, `name=web`, etc.)    |
+| `-n`, `--last`   | Shows the last N created containers (including stopped ones)        |
+| `-l`, `--latest` | Shows the latest created container                                  |
+| `-s`, `--size`   | Displays the disk size of the containers                            |
+| `--no-trunc`     | Shows output without truncation (full IDs, commands, etc.)          |
+| `--format`       | Customizes output using Go template syntax                          |
 
-### Örnekler
+### Examples
 
-```bash
-# Sadece çalışan container'lar
+Bash
+
+```
+# Only running containers
 docker ps
 
-# Tüm container'lar (durmuş dahil)
+# All containers (including stopped ones)
 docker ps -a
 
-# Sadece ID'leri listele
+# List only IDs
 docker ps -aq
 
-# İsme göre filtrele
+# Filter by name
 docker ps -f name=web
 
-# Duruma göre filtrele (örn. exited olanlar)
+# Filter by status (e.g., exited containers)
 docker ps -a -f status=exited
 
-# Özel tablo formatıyla göster
+# Show with a custom table format
 docker ps --format "table {{.ID}}\t{{.Names}}\t{{.Status}}\t{{.Ports}}"
 
-# Son oluşturulan 3 container
+# Last 3 created containers
 docker ps -n 3
+
 ```
 
----
+## Quick Reference Table
 
-## Hızlı Referans Tablosu
+| **Command**    | **What It Does**                              | **Most Common Usage**            |
+| -------------- | --------------------------------------------- | -------------------------------- |
+| `docker run`   | Creates and runs a new container              | `docker run -it --rm image bash` |
+| `docker exec`  | Sends a command to / enters a running container | `docker exec -it container bash` |
+| `docker build` | Produces an image from a Dockerfile           | `docker build -t name:tag .`     |
+| `docker ps`    | Lists containers                              | `docker ps -a`                   |
 
-| Komut | Ne İşe Yarar | En Sık Kullanılan Hâli |
-|---|---|---|
-| `docker run` | Yeni container oluşturup çalıştırır | `docker run -it --rm image bash` |
-| `docker exec` | Çalışan container'a komut gönderir/girer | `docker exec -it container bash` |
-| `docker build` | Dockerfile'dan image üretir | `docker build -t isim:tag .` |
-| `docker ps` | Container'ları listeler | `docker ps -a` |
+## Related Commands
 
----
+A few frequently used commands commonly used alongside `run` / `exec` / `build` / `ps`:
 
-## İlgili Komutlar
+Bash
 
-`run` / `exec` / `build` / `ps` ile birlikte sık kullanılan birkaç komut:
-
-```bash
-docker logs -f web       # Logları canlı takip et
-docker stop web          # Container'ı durdur
-docker start web         # Durmuş container'ı yeniden başlat
-docker rm web            # Durmuş container'ı sil
-docker images            # Yerel image'ları listele
-docker rmi image:tag     # Image'ı sil
 ```
+docker logs -f web       # Follow logs live
+docker stop web          # Stop the container
+docker start web         # Restart a stopped container
+docker rm web            # Remove a stopped container
+docker images            # List local images
+docker rmi image:tag     # Remove an image
 
----
-
-<p align="center"><i>🐳 Docker ile keyifli çalışmalar!</i></p>
+```
